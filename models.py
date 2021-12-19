@@ -7,12 +7,14 @@ from db import Base, engine
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    user_name = Column(String, unique=True)
+    login = Column(String, unique=True)
     password = Column(String)
     name = Column(String)
+    email = Column(String)
+    phone_number = Column(String)
 
     def __repr__(self):
-        return f'<User id = {self.id}, user_name = {self.user_name}>'
+        return f'<User id = {self.id}, login = {self.user_name}>'
         
 
 class Good(Base):
@@ -20,6 +22,7 @@ class Good(Base):
     id = Column(Integer, primary_key=True)
     producer = Column(String)
     model = Column(String)
+    category = Column(String)
 
     def __repr__(self):
         return f'<Good id = {self.id}, producer = {self.producer}, model = {self.model}>'
@@ -29,6 +32,7 @@ class Store(Base):
     __tablename__ = 'store'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    url = Column(String)
 
     def __repr__(self):
         return f'<Store id = {self.id}, name = {self.name}>'
@@ -51,6 +55,7 @@ class Find(Base):
     search_id = Column(Integer, ForeignKey('search.id'))    
     find_date = Column(DateTime)
     store_id = Column(Integer, ForeignKey('store.id'))
+    url = Column(String)
     price = Column(Float)
     stock = Column(Integer)
 

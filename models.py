@@ -1,8 +1,8 @@
 class User:
-    def __init__(self, login, password):
+    def __init__(self, login, password_hash):
         self.login = login
-        self.password = password
-        
+        self.password = password_hash
+       
 
 class Good:
     def __init__(self, producer, model, price, stock=0):

@@ -8,13 +8,13 @@ class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     login = Column(String, unique=True)
-    password = Column(String)
+    password_hash = Column(String)
     name = Column(String)
     email = Column(String)
     phone_number = Column(String)
 
-    def __repr__(self):
-        return f'<User id = {self.id}, login = {self.user_name}>'
+    def __str__(self):
+        return f'<User id: {self.id}, login: {self.login}, name: {self.name}, email: {self.email}, phone_number: {self.phone_number}>'
         
 
 class Good(Base):
@@ -24,8 +24,8 @@ class Good(Base):
     model = Column(String)
     category = Column(String)
 
-    def __repr__(self):
-        return f'<Good id = {self.id}, producer = {self.producer}, model = {self.model}>'
+    def __str__(self):
+        return f'<Good id: {self.id}, producer: {self.producer}, model: {self.model}, category: {self.category}>'
 
 
 class Store(Base):
@@ -34,8 +34,8 @@ class Store(Base):
     name = Column(String)
     url = Column(String)
 
-    def __repr__(self):
-        return f'<Store id = {self.id}, name = {self.name}>'
+    def __str__(self):
+        return f'<Store id: {self.id}, name: {self.name}, url: {self.url}>'
 
 
 class Search(Base):
@@ -45,8 +45,8 @@ class Search(Base):
     good_id = Column(Integer, ForeignKey('good.id'))
     search_date = Column(DateTime)
 
-    def __repr__(self):
-        return f'<Search id = {self.id}, user_id = {self.user_id}, good_id = {self.good_id}, search_date = {self.search_date}>'
+    def __str__(self):
+        return f'<Search id: {self.id}, user_id: {self.user_id}, good_id: {self.good_id}, search_date: {self.search_date}>'
 
 
 class Find(Base):
@@ -59,8 +59,9 @@ class Find(Base):
     price = Column(Float)
     stock = Column(Integer)
 
-    def __repr__(self):
-        return f'<Find id = {self.id}, search_id = {self.search_id}, find_date = {self.find_date}, store_id = {self.store_id}>'
+    def __str__(self):
+        return f'<Find id: {self.id}, search_id: {self.search_id}, find_date: {self.find_date}, store_id: {self.store_id}' \
+            + f'url: {self.url}, price: {self.price}, stock: {self.stock}>'
 
 
 if __name__ == "__main__":

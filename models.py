@@ -15,8 +15,8 @@ class User(Base):
 
     def __str__(self):
         return f'<User id: {self.id}, login: {self.login}, name: {self.name}, email: {self.email}, phone_number: {self.phone_number}>'
-        
 
+    
 class Good(Base):
     __tablename__ = 'good'
     id = Column(Integer, primary_key=True)

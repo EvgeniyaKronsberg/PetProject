@@ -1,3 +1,4 @@
+from flask import current_app
 import requests
 import time
 from bs4 import BeautifulSoup
@@ -34,9 +35,9 @@ def get_soup():
 
     search_url = get_search_url()
     html = get_html(search_url)
-    # if html:
-    #     with open("citylink_search_test.html", "w", encoding="utf8") as f:
-    #         f.write(html)
+    if html:
+        with open("citylink_search_test.html", "w", encoding="utf8") as f:
+            f.write(html)
 
     return BeautifulSoup(html, 'html.parser')
 

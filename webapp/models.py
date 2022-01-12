@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from sqlalchemy.sql.schema import ForeignKey
 
-from db import Base, engine
+from webapp.db import Base, engine
 
 
 class User(Base):

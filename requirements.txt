@@ -26,6 +26,7 @@ MarkupSafe==2.0.1
 mccabe==0.6.1
 parse==1.19.0
 platformdirs==2.4.0
+psycopg2-binary==2.9.3
 pyee==8.2.2
 pylint==2.12.2
 pyppeteer==1.0.0

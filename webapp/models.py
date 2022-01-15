@@ -1,17 +1,24 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from sqlalchemy.sql.schema import ForeignKey
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from webapp.db import Base, engine
 
 
 class User(Base):
     __tablename__ = 'user'
-    id = Column(Integer, primary_key=True)
-    login = Column(String, unique=True)
+    id = Column(Integer, primary_key=True) 
+    login = Column(String, index=True, unique=True)
     password_hash = Column(String)
     name = Column(String)
     email = Column(String)
     phone_number = Column(String)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def __str__(self):
         return f'<User id: {self.id}, login: {self.login}, name: {self.name}, email: {self.email}, phone_number: {self.phone_number}>'

@@ -9,18 +9,14 @@ from requests.exceptions import Timeout
 from requests_html import HTMLSession
 
 def get_html(url):
-    session = HTMLSession()
-    result = session.get(url)
-    result.raise_for_status()
-    return result.text
-    # try:
-    #     session = HTMLSession()
-    #     result = session.get(url)
-    #     result.raise_for_status()
-    #     return result.text
-    # except(requests.RequestException, ValueError) as err:
-    #     print(f'Сетевая ошибка {err}')
-    #     return False
+    try:
+        session = HTMLSession()
+        result = session.get(url)
+        result.raise_for_status()
+        return result.text
+    except(requests.RequestException, ValueError) as err:
+        print(f'Сетевая ошибка {err}')
+        return False
 
 
 def get_search_url():
@@ -30,15 +26,11 @@ def get_search_url():
     #     print(word)
     #     temp_url = temp_url + word + '+'
     # url = temp_url[:-1]
-    url = 'https://www.citilink.ru/search/?text=play+station'
+    url = 'https://www.citilink.ru/search/?text=nintendo+switch'
     return url
 
 
 def get_soup():
-    #html = get_html(input('Введите html-ссылку для отслеживания товара на сайте citilink.ru: '))
-
-    #html = get_html('https://www.citilink.ru/product/igrovaya-konsol-nintendo-switch-seryi-1183183/?text=nintendo')   #citylink
-
     search_url = get_search_url()
     html = get_html(search_url)
     if html:
@@ -50,23 +42,17 @@ def get_soup():
 
 def get_search_results(soup):
     try:
-
         found_products_grid = soup.find('section', class_='GroupGrid js--GroupGrid GroupGrid_has-column-gap GroupGrid_has-row-gap')
         found_products = found_products_grid.findAll('div', class_='ProductCardVertical_separated')
-
         result_list_of_products = []
         for item in found_products:
             data_params = item.get('data-params')
-            # print(type(data_params))
-            # print(data_params)
             if not data_params == None:
                 data_params_dict = json.loads(data_params)
-                # print(data_params_dict)
-                # print(type(data_params_dict)) 
                 result_list_of_products.append({
                     'product_name': data_params_dict.get('shortName'),
                     'price': data_params_dict.get('price'),
-                    'url': item.find('a')['href']
+                    'url': 'https://www.citilink.ru' + item.find('a')['href']
                 })
             else:
                 continue

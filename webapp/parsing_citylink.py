@@ -3,28 +3,34 @@ import requests
 import time
 from bs4 import BeautifulSoup
 from datetime import datetime
+import json
 
 from requests.exceptions import Timeout
 from requests_html import HTMLSession
 
 def get_html(url):
-    try:
-        session = HTMLSession()
-        result = session.get(url)
-        result.raise_for_status()
-        return result.text
-    except(requests.RequestException, ValueError):
-        print('Сетевая ошибка')
-        return False
+    session = HTMLSession()
+    result = session.get(url)
+    result.raise_for_status()
+    return result.text
+    # try:
+    #     session = HTMLSession()
+    #     result = session.get(url)
+    #     result.raise_for_status()
+    #     return result.text
+    # except(requests.RequestException, ValueError) as err:
+    #     print(f'Сетевая ошибка {err}')
+    #     return False
 
 
 def get_search_url():
-    search_query = input('Введите название товара для отслеживания на сайте citilink.ru: ').split()
-    temp_url = 'https://www.citilink.ru/search/?text='
-    for word in search_query:
-        print(word)
-        temp_url = temp_url + word + '+'
-    url = temp_url[:-1]
+    # search_query = input('Введите название товара для отслеживания на сайте citilink.ru: ').split()
+    # temp_url = 'https://www.citilink.ru/search/?text='
+    # for word in search_query:
+    #     print(word)
+    #     temp_url = temp_url + word + '+'
+    # url = temp_url[:-1]
+    url = 'https://www.citilink.ru/search/?text=play+station'
     return url
 
 
@@ -44,14 +50,29 @@ def get_soup():
 
 def get_search_results(soup):
     try:
-        # found_products = soup.findAll('div')
-        
-        # found_products_grid = soup.find('div', class_='ProductCardCategoryList__grid')
+
         found_products_grid = soup.find('section', class_='GroupGrid js--GroupGrid GroupGrid_has-column-gap GroupGrid_has-row-gap')
-        
-        found_products = found_products_grid.find('div', class_='product_data__gtm-js product_data__pageevents-js  ProductCardVertical js--ProductCardInListing ProductCardVertical_normal ProductCardVertical_shadow-hover ProductCardVertical_separated')
-        print(type(found_products))
-        print(found_products)
+        found_products = found_products_grid.findAll('div', class_='ProductCardVertical_separated')
+
+        result_list_of_products = []
+        for item in found_products:
+            data_params = item.get('data-params')
+            # print(type(data_params))
+            # print(data_params)
+            if not data_params == None:
+                data_params_dict = json.loads(data_params)
+                # print(data_params_dict)
+                # print(type(data_params_dict)) 
+                result_list_of_products.append({
+                    'product_name': data_params_dict.get('shortName'),
+                    'price': data_params_dict.get('price'),
+                    'url': item.find('a')['href']
+                })
+            else:
+                continue
+         
+        print(result_list_of_products)
+
     except AttributeError:
         print('Ошибка поиска')
 
@@ -77,7 +98,7 @@ if __name__ == '__main__':
     soup = get_soup()
     
     if soup:
-        time.sleep(6)
+        time.sleep(3)
         get_search_results(soup)
     #     price = check_price(soup)
     #     search_datetime_raw = datetime.now()
